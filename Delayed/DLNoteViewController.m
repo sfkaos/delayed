@@ -57,9 +57,9 @@
 - (NSString*)lateMessage
 {
     if ([self.minutesLate intValue] < 20) {
-        return [NSString stringWithFormat:@"Hey Tim, I'll be %@ minutes late.", self.minutesLate];
+        return [NSString stringWithFormat:@"Hey Christine, I'll be %@ minutes late.", self.minutesLate];
     } else {
-        return [NSString stringWithFormat:@"Hey Tim, I'll be more than 20 minutes late."];
+        return [NSString stringWithFormat:@"Hey Christine, I'll be more than 20 minutes late."];
     }
 }
 
@@ -121,12 +121,20 @@
 
 - (void)sendPayment
 {
-    [[Venmo sharedInstance] sendPaymentTo:@"8575401890"
-                                   amount:5.0f
-                                     note:[NSString stringWithFormat:@" - %@ Grab a coffee on me!", [self lateMessage]]
+    NSString *unencodedString = [NSString stringWithFormat:@" - %@ Grab a coffee on me!", [self lateMessage]];
+    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+                                                                                  NULL,
+                                                                                  (CFStringRef)unencodedString,
+                                                                                  NULL,
+                                                                                  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+                                                                                  kCFStringEncodingUTF8 ));
+
+    [[Venmo sharedInstance] sendPaymentTo:@"4127369697"
+                                   amount:300.0f
+                                     note:unencodedString
                         completionHandler:^(VENTransaction *transaction, BOOL success, NSError *error) {
                             if (success) {
-                                NSLog(@"Transaction succeeded!");
+//                                NSLog(@"Transaction succeeded!");
                                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                                 hud.mode = MBProgressHUDModeText;
                                 hud.labelText = @"Coffee sent. Now hurry up!";

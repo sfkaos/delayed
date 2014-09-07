@@ -56,13 +56,13 @@
     self.navigationItem.backBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
 
     DLNoteViewController *noteViewController = segue.destinationViewController;
-    noteViewController.phoneNumber = @"7039669682";
+    noteViewController.phoneNumber = @"4127369697";
     noteViewController.minutesLate = [NSNumber numberWithInteger:self.minutesLate];
 }
 
 - (void)makeCall
 {
-    NSString *phoneNumber = @"7039669682";
+    NSString *phoneNumber = @"4127369697";
     // Call our Cloud Function that sends an SMS with Twilio
     [PFCloud callFunctionInBackground:@"inviteWithTwilio"
                        withParameters:@{ @"number" : phoneNumber, @"message" : @"Yo yo yo yo!" }
